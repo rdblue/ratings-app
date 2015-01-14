@@ -36,29 +36,21 @@ import static spark.Spark.post;
 public class RatingsApp {
 
   private static final Random rand = new Random();
-
   private static final String MOVIES_URI = "dataset:hive:movies";
-  private static final String USERS_URI = "dataset:hive:users";
+  private static final FlumeClient FLUME = new FlumeClient("localhost", 41415);
 
   private static List<Movie> MOVIES = null;
-  private static List<User> USERS = null;
-
-  private static final FlumeClient FLUME = new FlumeClient("localhost", 41415);
 
   public static void main(String[] args) {
     String moviesUri = MOVIES_URI;
-    String usersUri = USERS_URI;
     switch (args.length) {
-      case 3:
-        externalStaticFileLocation(args[2]);
       case 2:
-        moviesUri = args[1];
+        externalStaticFileLocation(args[1]);
       case 1:
-        usersUri = args[0];
+        moviesUri = args[0];
     }
 
     MOVIES = cache(Datasets.load(moviesUri, Movie.class));
-    USERS = cache(Datasets.load(usersUri, User.class));
 
     get(new VelocityRoute("/") {
       @Override
@@ -111,10 +103,24 @@ public class RatingsApp {
 
   }
 
+  /**
+   * Creates a random but consistent ID for the given user name.
+   *
+   * @param name a user name.
+   * @return a random ID in [0,1000)
+   */
   private static long idFor(String name) {
-    return (name.hashCode() & Integer.MAX_VALUE) % USERS.size();
+    return (name.hashCode() & Integer.MAX_VALUE) % 1000;
   }
 
+  /**
+   * Returns a list of {@code num} random items from the given {@link List}.
+   *
+   * @param source a {@code List}
+   * @param num an int
+   * @param <E> the type of items in the list
+   * @return a {@code List} of {@code num} random items from the source list
+   */
   private static <E> List<E> sample(List<E> source, int num) {
     int size = source.size();
     List<E> list = Lists.newArrayListWithExpectedSize(num);
@@ -124,9 +130,16 @@ public class RatingsApp {
     return list;
   }
 
-  private static <E> List<E> cache(View<E> dataset) {
+  /**
+   * Returns the contents of a {@link View} as a {@link List}.
+   *
+   * @param view a {@code View} of source data
+   * @param <E> the type of items in the view
+   * @return the contents of {@code view} as a {@code List}
+   */
+  private static <E> List<E> cache(View<E> view) {
     List<E> list = Lists.newArrayList();
-    try (DatasetReader<E> reader = dataset.newReader()) {
+    try (DatasetReader<E> reader = view.newReader()) {
       for (E record : reader) {
         list.add(record);
       }
