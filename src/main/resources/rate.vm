@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+##
+## Copyright 2014 Cloudera, Inc.
+##
+## Licensed under the Apache License, Version 2.0 (the "License");
+## you may not use this file except in compliance with the License.
+## You may obtain a copy of the License at
+##
+##   http://www.apache.org/licenses/LICENSE-2.0
+##
+## Unless required by applicable law or agreed to in writing, software
+## distributed under the License is distributed on an "AS IS" BASIS,
+## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+## See the License for the specific language governing permissions and
+## limitations under the License.
+##
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>${title}</title>
+  </head>
+  <body>
+  <h2>Hello ${name}!</h2>
+
+  <p>You are user number: ${id}</p>
+
+  <form method="post" action="/${name}">
+    <label for="movie_id">Movie</label>
+    <select id="movie_id" name="movie_id">
+      #foreach ($movie in ${movies})
+      <option value="${movie.getId()}">${movie.getTitle()}</option>
+      #end
+    </select>
+    <br />
+    <label for="rating">Rating</label>
+    <select id="rating" name="rating">
+      <option value="1">1 - It gave me uncontrollable nausea.</option>
+      <option value="2">2 - Bad, but that one part was alright.</option>
+      <option value="3" selected="true">3 - Honestly, I don't remember.</option>
+      <option value="4">4 - We all liked it, right? . . . right?</option>
+      <option value="5">5 - So wonderful I put the DVD under my pillow at night.</option>
+    </select>
+    <br />
+    <input id="submit" type="submit" value="Save my important opinon!" />
+  </form>
+  </body>
+</html>
