@@ -38,6 +38,7 @@
     <spark.version>1.0</spark.version>
     <flume.version>1.5.2</flume.version>
     <maven-compiler-plugin.version>2.5.1</maven-compiler-plugin.version>
+    <maven-assembly-plugin.version>2.4.1</maven-assembly-plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
@@ -47,6 +48,11 @@
       <groupId>com.sparkjava</groupId>
       <artifactId>spark-core</artifactId>
       <version>${spark.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-util</artifactId>
+      <version>9.0.2.v20130417</version>
     </dependency>
     <!-- Use velocity for templates -->
     <dependency>
@@ -59,6 +65,30 @@
       <groupId>org.apache.flume</groupId>
       <artifactId>flume-ng-core</artifactId>
       <version>${flume.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.twitter</groupId>
+      <artifactId>parquet-avro</artifactId>
+      <version>1.4.1</version>
+    </dependency>
+    <!-- No need for crunch or mapreduce -->
+    <dependency>
+      <groupId>org.apache.crunch</groupId>
+      <artifactId>crunch-core</artifactId>
+      <version>${kite.crunch.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.kitesdk</groupId>
+      <artifactId>kite-data-crunch</artifactId>
+      <version>${kite.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.kitesdk</groupId>
+      <artifactId>kite-data-mapreduce</artifactId>
+      <version>${kite.version}</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 
@@ -82,16 +112,14 @@
       <plugin>
         <!-- build an uber-jar that can be called with `hadoop jar` -->
         <artifactId>maven-assembly-plugin</artifactId>
+        <version>${maven-assembly-plugin.version}</version>
         <configuration>
           <archive>
             <manifest>
               <mainClass>org.kitesdk.examples.movies.RatingsApp</mainClass>
             </manifest>
           </archive>
-          <descriptorRefs>
-            <descriptorRef>jar-with-dependencies</descriptorRef>
-          </descriptorRefs>
-          <classifier>shaded</classifier>
+          <descriptor>src/main/resources/runtime.xml</descriptor>
         </configuration>
         <executions>
           <execution>
@@ -110,35 +138,6 @@
         <configuration>
           <source>1.7</source>
           <target>1.7</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.rat</groupId>
-        <artifactId>apache-rat-plugin</artifactId>
-        <version>0.9</version>
-        <executions>
-          <execution>
-            <phase>verify</phase>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <excludes>
-            <exclude>**/*.avro</exclude>
-            <exclude>**/*.avsc</exclude>
-            <exclude>**/*.iml</exclude>
-            <exclude>**/*.md</exclude>
-            <exclude>**/*.txt</exclude>
-            <exclude>**/.classpath</exclude>
-            <exclude>**/.project</exclude>
-            <exclude>**/.settings/**</exclude>
-            <exclude>**/target/**</exclude>
-            <exclude>.git/**</exclude>
-            <exclude>.gitignore</exclude>
-            <exclude>.idea/**</exclude>
-          </excludes>
         </configuration>
       </plugin>
     </plugins>

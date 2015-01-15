@@ -36,7 +36,7 @@ import static spark.Spark.post;
 public class RatingsApp {
 
   private static final Random rand = new Random();
-  private static final String MOVIES_URI = "dataset:hive:movies";
+  private static final String MOVIES_URI = "dataset:file:data/movies";
   private static final FlumeClient FLUME = new FlumeClient("localhost", 41415);
 
   private static List<Movie> MOVIES = null;

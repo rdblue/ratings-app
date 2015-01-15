@@ -28,8 +28,10 @@ to provide some movies to rate. You can use the [Kite CLI][kite-cli] to create
 the dataset.
 
 ```
-kite-dataset create movies --schema src/main/avro/movie.avsc
-kite-dataset csv-import u.item movies --delimiter '|' --no-header
+kite-dataset create dataset:file:data/movies \
+                            --schema src/main/avro/movie.avsc
+kite-dataset csv-import u.item dataset:file:data/movies \
+                            --delimiter '|' --no-header
 ```
 
 ### Flume ratings pipeline
