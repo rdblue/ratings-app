@@ -71,6 +71,6 @@ This will create an uberjar that can be run on a Hadoop cluster, like the
 QuickStart VM, by running the following.
 
 ```
-hadoop jar target/ratings-app-0.17.1-jar-with-dependencies.jar
+hadoop jar target/ratings-app-0.17.1-jar-with-runtime.jar
 ```
 
