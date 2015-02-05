@@ -5,8 +5,7 @@
   "fields" : [ {
     "name" : "timestamp",
     "type" : "long",
-    "doc" : "A timestamp when the rating was submitted",
-    "default": null
+    "doc" : "A timestamp when the rating was submitted"
   }, {
     "name" : "user_id",
     "type" : ["null", "long"],
